@@ -1,6 +1,6 @@
 # DevKanban
 
-This is meant to be the best kanban system for developers.
+The best kanban system for developers.
 
 - Putting automation first
 - Clientside processing (Web Worker)
