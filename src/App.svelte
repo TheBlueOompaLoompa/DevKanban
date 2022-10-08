@@ -1,57 +1,64 @@
 <script lang="ts">
-  import { supabase } from './lib/supabase.ts';
-  import Board from './lib/Board.svelte';
-  import { session as sessionStore } from './lib/stores.ts';
+  import { user as userStore } from './lib/stores.js';
   import {onMount} from 'svelte';
+  import { supabase } from './lib/supabase.js';
 
-  let board = '';
+  import Nav from './lib/Nav.svelte';
+  import Boards from './lib/Boards.svelte'
+  import Board from './lib/Board.svelte';
+  
+
+  let boardId = '';
 
   let authProcess = false;
 
-  let session;
+  let user;
 
-  sessionStore.subscribe(v => {
-    session = v;
-    alert(session == undefined)
+  userStore.subscribe(v => {
+    user = v;
   });
 
   onMount(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      sessionStore.set(data.session)
-    });
-
-    supabase.auth.onAuthStateChange((_event, _session) => {
-      sessionStore.set(data._session)
-    });
+    const u = supabase.auth.user();
+    if(u) userStore.set(u);
   });
+
+  function openBoard(bd: any) {
+    boardId = bd.detail.id;
+    console.log(bd)
+  }
 
   async function signInWithGithub() {
     authProcess = true;
 
-    const { user, _session, error } = await supabase.auth.signIn({
+    const { user, session, error } = await supabase.auth.signIn({
       provider: 'github',
     });
 
-    if(!error) sessionStore.set(_session)
+    if(!error) userStore.set(user);
 
     authProcess = false;
   }
 </script>
 
 <main>
-{#if !session}
+  <Nav/>
+{#if !user}
   <h1>Login</h1>
   {#if !authProcess}
   <button on:click={signInWithGithub}>Sign in with Github</button>
   {/if}
 {:else}
-  {#if board != ''}
-  <Board/>
+  {#if boardId != ''}
+  <Board id={boardId}/>
   {:else}
-  <h1>Boards</h1>
+  <Boards on:open={openBoard}/>
   {/if}
 {/if}
 </main>
 
 <style>
+  main {
+    height: 100%;
+  }
 </style>
