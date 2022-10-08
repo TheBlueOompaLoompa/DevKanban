@@ -10,7 +10,9 @@
     userStore.subscribe(val => user = val);
 
     async function createBoard() {
-        await createThing('boards', 'owner', user.id, 'board');
+        let { data, error} = await createThing('boards', 'owner', user.id, 'board');
+
+        if(!error) dispatch('open', data[0].id);
     }
 
     async function loadBoards() {

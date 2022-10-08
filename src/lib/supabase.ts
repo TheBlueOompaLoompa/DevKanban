@@ -6,25 +6,31 @@ const supabaseKey =
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   persistSession: true,
-  autoRefreshToken: true
+  autoRefreshToken: true,
 });
 
-export async function createThing(table: string, parentName: string, parentId: string, thing: string) {
+export async function createThing(
+  table: string,
+  parentName: string,
+  parentId: string,
+  thing: string
+) {
   let name = '';
-  while(name.length < 1) {
+  while (name.length < 1) {
     name = prompt('Name your list (minimum 1 character)');
 
-    if(name == null) return;
+    if (name == null) return;
   }
 
-  let item = {name};
+  let item = { name };
 
   item[parentName] = parentId;
 
-  let { error } = await supabase.from(table).insert(item);
+  let { data, error } = await supabase.from(table).insert(item);
 
-
-  if(error) {
+  if (error) {
     alert(alert(`Failed to create ${thing}!`));
   }
+
+  return { data, error };
 }

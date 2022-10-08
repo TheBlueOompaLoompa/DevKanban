@@ -8,7 +8,8 @@
   let cards = [];
 
   async function createCard() {
-    await createThing('cards', 'list', id, 'card');
+    let { data, error } = await createThing('cards', 'list', id, 'card');
+    cards = [...cards, ...data]
   }
 
   async function loadCards() {
@@ -22,7 +23,7 @@
   }
 
   loadCards().then(() => {
-    supabase.from('lists').on('*', payload => {loadCards(); console.log(payload)}).subscribe();
+    supabase.from('cards').on('*', loadCards).subscribe();
   });
 </script>
 

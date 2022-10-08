@@ -25,7 +25,6 @@
 
   function openBoard(bd: any) {
     boardId = bd.detail.id;
-    console.log(bd)
   }
 
   async function signInWithGithub() {
