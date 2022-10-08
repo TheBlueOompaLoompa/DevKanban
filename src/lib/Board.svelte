@@ -1,6 +1,7 @@
 <script lang="ts">
   //import { dndzone } from 'svelte-dnd-action';
-  import { supabase } from './supabase.js';
+  import { supabase, createThing } from './supabase.js';
+  import { user as userStore } from './stores.js';
   import type { IList } from './types.js';
   import List from './List.svelte';
 
@@ -8,11 +9,19 @@
 
   let lists: IList[] = [];
 
-  async function loadLists() {
-    const res = await supabase.from('lists').select('*').eq('board', id);
+  let user: any;
 
-    if(res.status.toString().startsWith('20')) {
-      lists = res.body;
+  userStore.subscribe(val => user = val);
+
+  async function createList() {
+    await createThing('lists', 'board', id, 'list');
+  }
+
+  async function loadLists() {
+    let { data, error } = await supabase.from('lists').select('*').eq('board', id);
+
+    if(!error) {
+      lists = data;
     }
   }
 
@@ -20,6 +29,8 @@
     supabase.from('lists').on('*', loadLists);
   })
 </script>
+
+<button on:click={createList}>Add List</button>
 
 <section>
   {#each lists as list(list.id)}
@@ -32,5 +43,9 @@
     display: flex;
     flex-direction: row;
     overflow-x: scroll;
+
+    margin-top: 10px;
+
+    padding-left: 10px;
   }
 </style>
