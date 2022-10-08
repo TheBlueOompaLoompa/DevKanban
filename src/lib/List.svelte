@@ -16,11 +16,13 @@
 
     if(!error) {
       cards = data;
+    }else{
+      console.error(error);
     }
   }
 
   loadCards().then(() => {
-    supabase.from('lists').on('*', loadCards);
+    supabase.from('lists').on('*', payload => {loadCards(); console.log(payload)}).subscribe();
   });
 </script>
 

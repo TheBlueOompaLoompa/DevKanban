@@ -26,7 +26,7 @@
   }
 
   loadLists().then(() => {
-    supabase.from('lists').on('*', loadLists);
+    supabase.from('lists').on('*', loadLists).subscribe();
   })
 </script>
 
@@ -42,7 +42,6 @@
   section {
     display: flex;
     flex-direction: row;
-    overflow-x: scroll;
 
     margin-top: 10px;
 

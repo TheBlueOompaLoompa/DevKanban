@@ -8,16 +8,16 @@
 </card>
 
 <style>
-    card {
-        background-color: rgba(0, 0, 0, 0.2);
-        width: 90%;
+  card {
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 90%;
 
-        border-radius: var(--curvy);
+    border-radius: var(--curvy);
 
-        margin: 3px 0px 3px 0px;
-    }
+    margin: 3px 0px 3px 0px;
+  }
 
-    p {
-        margin: 10px;
-    }
+  p {
+    margin: 10px;
+  }
 </style>

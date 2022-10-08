@@ -10,16 +10,18 @@
     userStore.subscribe(val => user = val);
 
     async function createBoard() {
-        await createThing('cards', 'list', user.id, 'card');
+        await createThing('boards', 'owner', user.id, 'board');
     }
 
     async function loadBoards() {
         let boards = [];
 
-        const res = await supabase.from('boards').select('*');
+        let { data, error } = await supabase.from('boards').select('*');
 
-        if(res.status.toString().startsWith('20')) {
-            boards = res.body;
+        if(!error) {
+            boards = data;
+        }else {
+            alert('Failed to load boards!');
         }
 
         return boards;

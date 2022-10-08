@@ -60,5 +60,6 @@
 <style>
   main {
     height: 100%;
+    overflow-x: scroll;
   }
 </style>
