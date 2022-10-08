@@ -4,7 +4,7 @@
 </script>
 
 <card>
-    <p>{name}</p>
+  <p>{name}</p>
 </card>
 
 <style>
