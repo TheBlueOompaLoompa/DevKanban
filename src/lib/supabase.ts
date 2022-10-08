@@ -9,3 +9,22 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   autoRefreshToken: true
 });
 
+export async function createThing(table: string, parentName: string, parentId: string, thing: string) {
+  let name = '';
+  while(name.length < 1) {
+    name = prompt('Name your list (minimum 1 character)');
+
+    if(name == null) return;
+  }
+
+  let item = {name};
+
+  item[parentName] = parentId;
+
+  let { error } = await supabase.from(table).insert(item);
+
+
+  if(error) {
+    alert(alert(`Failed to create ${thing}!`));
+  }
+}
