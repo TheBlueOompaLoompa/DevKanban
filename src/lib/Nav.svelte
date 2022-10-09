@@ -54,13 +54,21 @@
 
         if(profileSrc == '') profileSrc = data['results'][0]['picture']['thumbnail']
     });
+
+    async function signOut() {
+        if(name != '') {
+            let { error } = await supabase.auth.signOut();
+            if(error) alert('Failed to sign out!');
+            else window.location.reload();
+        }
+    }
 </script>
 
 <nav>
     <button on:click={() => goto('/')}>Home</button>
 
     <p>{name}</p>
-    <img src={profileSrc} alt="profile">
+    <img src={profileSrc} alt="profile" on:click={signOut}>
 </nav>
 
 <style>
@@ -79,7 +87,6 @@
 
         align-items: center;
 
-        user-select: none;
     }
 
     p {

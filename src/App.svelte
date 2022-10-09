@@ -21,6 +21,9 @@
   onMount(() => {
     const u = supabase.auth.user();
     if(u) userStore.set(u);
+    setInterval(() => {
+      if(window.location.href.endsWith('#')) window.location.href = '/';
+    }, 200)
   });
 
   function openBoard(bd: any) {
