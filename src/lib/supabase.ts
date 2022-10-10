@@ -13,7 +13,8 @@ export async function createThing(
   table: string,
   parentName: string,
   parentId: string,
-  thing: string
+  thing: string,
+  extra: any = {}
 ) {
   let name = '';
   while (name.length < 1) {
@@ -22,7 +23,7 @@ export async function createThing(
     if (name == null) return;
   }
 
-  let item = { name };
+  let item = { name, ...extra };
 
   item[parentName] = parentId;
 

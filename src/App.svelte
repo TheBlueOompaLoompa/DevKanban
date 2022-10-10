@@ -61,7 +61,12 @@
 
 <style>
   main {
-    height: 100%;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    
     overflow-x: scroll;
   }
 </style>
