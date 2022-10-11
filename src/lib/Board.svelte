@@ -1,9 +1,9 @@
 <script lang="ts">
   import {flip} from "svelte/animate";
   import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
-  import { supabase, createThing } from './supabase.js';
   import { user as userStore } from './stores.js';
   import type { IList } from './types.js';
+  import { loadLists, createList } from './board.js';
   import List from './List.svelte';
 
   overrideItemIdKeyNameBeforeInitialisingDndZones("order");
@@ -16,21 +16,8 @@
 
   userStore.subscribe(val => user = val);
 
-  async function createList() {
-    await createThing('lists', 'board', id, 'list', {order: lists[0] ? lists[lists.length - 1].order + 1 : 0});
-  }
-
-  async function loadLists() {
-    let { data, error } = await supabase.from('lists').select('*').eq('board', id);
-
-    if(!error) {
-      lists = data;
-      lists = lists.sort(function(a, b){return a.order-b.order});
-    }
-  }
-
-  loadLists().then(() => {
-    supabase.from('lists').on('*', loadLists).subscribe();
+  loadLists(boardId).then(() => {
+    supabase.from('lists').on('*', async () => await loadLists(boardId)).subscribe();
   });
 
   async function updateOrder() {
@@ -53,11 +40,11 @@
   }
 </script>
 
-<button on:click={createList}>Add List</button>
+<button on:click={() => lists = createList(id, lists)}>Add List</button>
 
 <section use:dndzone={{items: lists, flipDurationMs}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
   {#each lists as list(list.order)}
-  <List id={list.id} name={list.name}/>
+  <List id={list.id} name={list.name} cards={list.cards}/>
   {/each}
 </section>
 

@@ -2,34 +2,14 @@
   import { flip } from "svelte/animate";
   import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
   import { supabase, createThing } from './supabase.js';
+
   import Card from "./Card.svelte";
 
   overrideItemIdKeyNameBeforeInitialisingDndZones("order");
 
   export let id: string;
   export let name: string;
-
-  let cards = [];
-
-  async function createCard() {
-    let { data, error } = await createThing('cards', 'list', id, 'card', {order: cards[0] ? cards[cards.length - 1].order + 1 : 0});
-    cards = [...cards, ...data]
-  }
-
-  async function loadCards() {
-    let { data, error } = await supabase.from('cards').select('*').eq('list', id);
-
-    if(!error) {
-      cards = data;
-      cards = cards.sort(function(a, b){return a.order-b.order});
-    }else{
-      console.error(error);
-    }
-  }
-
-  loadCards().then(() => {
-    supabase.from('cards').on('*', loadCards).subscribe();
-  });
+  export let cards: any[];
 
   async function updateOrder() {
     for(let i = 0; i < cards.length; i++) {
