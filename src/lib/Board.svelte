@@ -29,8 +29,8 @@
     }
   }
 
-  loadLists().then(() => {
-    supabase.from('lists').on('*', loadLists).subscribe();
+  loadLists(id).then(() => {
+    supabase.from('lists').on('*', () => loadLists(id)).subscribe();
   });
 
   async function updateOrder() {

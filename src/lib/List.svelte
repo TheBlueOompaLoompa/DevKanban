@@ -4,8 +4,6 @@
   import { supabase, createThing } from './supabase.js';
   import Card from "./Card.svelte";
 
-  overrideItemIdKeyNameBeforeInitialisingDndZones("order");
-
   export let id: string;
   export let name: string;
 
